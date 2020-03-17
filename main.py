@@ -5,7 +5,8 @@ from term_class import Term
 def docs_print():
     print('''no spaces allowed
 input '1' to evaluate only 1 complicated integral term
-(for integration by parts put brackets around product terms)''')
+(for integration by parts put brackets around product terms)
+Don't forget to put +C at the end of an indefinite integral''')
 
 
 def get_mult_sep(s):
@@ -39,8 +40,10 @@ s = input()
 if s == '1':
     s = input()
     sep = get_mult_sep(s)
+    print('Integration by parts #1: ', end='')
     by_parts(s, sep)
     rev_s = s[sep+1:] + '*' + s[:sep]
+    print('Integration by parts #2: ', end='')
     by_parts(rev_s, get_mult_sep(rev_s))
     # print(Term(s).to_str())
 else:
