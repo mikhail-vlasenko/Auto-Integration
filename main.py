@@ -4,9 +4,10 @@ from term_class import Term
 
 def docs_print():
     print('''no spaces allowed
-input '1' to evaluate only 1 complicated integral term
+input 'bp' to evaluate only 1 complicated integral term by parts
 (for integration by parts put brackets around product terms)
-Don't forget to put +C at the end of an indefinite integral''')
+input 'sum' to evaluate a sum of simple integrals
+by default, evaluate a single integral''')
 
 
 def get_mult_sep(s):
@@ -46,7 +47,7 @@ if s == '1':
     print('Integration by parts #2: ', end='')
     by_parts(rev_s, get_mult_sep(rev_s))
     # print(Term(s).to_str())
-else:
+elif s == 'sum':
     terms = re.split('[+-]', s)
     signs = re.findall(r'[-+]', s)
 
@@ -55,3 +56,5 @@ else:
         print(t.to_str(), end=' ')
         if i != len(terms) - 1:
             print(signs[i], end=' ')
+else:
+    print(Term(s).to_str() + ' + C')
