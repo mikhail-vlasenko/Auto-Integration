@@ -3,11 +3,20 @@ from term_class import Term
 
 
 def docs_print():
-    print('''no spaces allowed
-input 'bp' to evaluate only 1 complicated integral term by parts
+    print('''input 'bp' to evaluate only 1 complicated integral term by parts
 (for integration by parts put brackets around product terms)
 input 'sum' to evaluate a sum of simple integrals
 by default, evaluate a single integral''')
+
+
+def beautify(beaut_s):
+    new_s = ''
+    for i in range(len(beaut_s)):
+        if beaut_s[i] == ' ':
+            pass
+        else:
+            new_s += beaut_s[i]
+    return new_s
 
 
 def get_mult_sep(s):
@@ -37,9 +46,9 @@ def by_parts(s, sep):
 
 docs_print()
 
-s = input()
+s = beautify(input())
 if s == '1':
-    s = input()
+    s = beautify(input())
     sep = get_mult_sep(s)
     print('Integration by parts #1: ', end='')
     by_parts(s, sep)
@@ -48,6 +57,7 @@ if s == '1':
     by_parts(rev_s, get_mult_sep(rev_s))
     # print(Term(s).to_str())
 elif s == 'sum':
+    s = beautify(input())
     terms = re.split('[+-]', s)
     signs = re.findall(r'[-+]', s)
 

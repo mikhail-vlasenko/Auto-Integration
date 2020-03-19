@@ -26,9 +26,16 @@ class Term:
         self.e_power = e_power
 
     def from_str(self, s):
-        self.coef = float(re.search(r'[.\-0-9]*', s)[0])
-        coef_end = re.search(r'[.\-0-9]*', s).end()
-        assert s[coef_end] == '*'
+        if s[0].isdigit():
+            self.coef = float(re.search(r'[.\-0-9]*', s)[0])
+            coef_end = re.search(r'[.\-0-9]*', s).end()
+            if coef_end == len(s):
+                self.power = 0
+                return
+            assert s[coef_end] == '*', 'Input format error'
+        else:
+            self.coef = 1
+            coef_end = -1
         if s[coef_end+1] == 'x':
             if coef_end+2 < len(s) and s[coef_end+2] == '^':
                 self.power = float(re.search(r'[.\-0-9]*', s[coef_end+3:])[0])
@@ -87,22 +94,24 @@ class Term:
             self.int_coef = self.coef
             self.int_trigon = self.trigon
 
-        if self.int_coef % 1 == 0 or self.int_power == 0:
-            res = str(self.int_coef)
+        if self.int_coef == 1:
+            res = ''
+        elif self.int_coef % 1 == 0 or self.int_power == 0:
+            res = str(self.int_coef) + '*'
         else:
-            res = str(self.coef) + '/' + str(self.int_power)
+            res = str(self.coef) + '/' + str(self.int_power) + '*'
         if self.log:
-            res += '*ln(|x|)'
+            res += 'ln(|x|)'
         elif self.int_trigon == 1:
-            res += '*sin(x)'
+            res += 'sin(x)'
         elif self.int_trigon == 2:
-            res += '*cos(x)'
+            res += 'cos(x)'
         elif self.e_power:
-            res += '*e^(' + self.e_power.to_str(integrate=False) + ')'
+            res += 'e^(' + self.e_power.to_str(integrate=False) + ')'
         else:
             if self.int_power == 0:
                 return res
             if self.int_power == 1:
-                return res + '*x'
-            res += '*x^' + str(self.int_power)
+                return res + 'x'
+            res += 'x^' + str(self.int_power)
         return res
